@@ -1,5 +1,7 @@
 import Image from "next/image";
 import styles from "./page.module.css";
+import Link from "next/link";
+import "./styles/app.css";
 
 export default function Home() {
   return (
@@ -14,11 +16,11 @@ export default function Home() {
           priority
         />
         <ol>
-          <li>
-            <a href="/youtube">Youtube</a>
+          <li className="blue">
+            <Link href={'/youtube'}>Youtube</Link>
           </li>
-          <li><a href="/facebook">Facebook</a></li>
-          <li><a href="/tiktok">Tiktok</a></li>
+          <li><Link href={'/facebook'}>Facebook</Link></li>
+          <li> <Link href={'/tiktok'}>Tiktok</Link></li>
         </ol>
       </main>
     </div>

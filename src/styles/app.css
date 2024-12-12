@@ -7,3 +7,10 @@
     background-color: lightseagreen;
     border: solid 1px;
 }
+
+.footer {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    text-align: center;
+    background-color: lightgray;

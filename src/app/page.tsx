@@ -1,27 +1,47 @@
-import Image from "next/image";
+'use client'
 import styles from "./page.module.css";
-import Link from "next/link";
-import "./styles/app.css";
+import "../styles/app.css";
+import InfoTable from "@/Components/app.table";
+//import { useEffect } from "react";
+import useSWR from 'swr';
 
 export default function Home() {
+
+  const fetcher = (url: string) => fetch(url)
+  .then(r => r.json());
+
+  const { data } = useSWR(
+    "https://my-json-server.typicode.com/Ares7760-sudo/light-backend-api/blogs", 
+    fetcher, 
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false
+    }    
+  );
+
+  if(!data) {
+    return <div>loading...</div>
+  }
+    console.log("check res >>>", data);
+
+    /*
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch("https://my-json-server.typicode.com/Ares7760-sudo/light-backend-api/blogs");
+      const data = await res.json();
+      console.log("check res >>>", data);
+    }
+
+    fetchData();
+  }, [])*/
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li className="blue">
-            <Link href={'/youtube'}>Youtube</Link>
-          </li>
-          <li><Link href={'/facebook'}>Facebook</Link></li>
-          <li> <Link href={'/tiktok'}>Tiktok</Link></li>
-        </ol>
+      <InfoTable 
+        blogs={data}
+      />
       </main>
     </div>
   );

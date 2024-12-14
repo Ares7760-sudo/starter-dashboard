@@ -11,7 +11,7 @@ export default function Home() {
   .then(r => r.json());
 
   const { data } = useSWR(
-    "https://my-json-server.typicode.com/Ares7760-sudo/light-backend-api/blogs", 
+    "http://localhost:3001/api/blogs", 
     fetcher, 
     {
       revalidateIfStale: false,

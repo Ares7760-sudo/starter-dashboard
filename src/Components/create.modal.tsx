@@ -33,7 +33,7 @@ function AddBlogModal(props: IProps) {
           return;
         }
         
-        fetch("https://myblog-backend-ii3d.onrender.com/api/create-new-blog", {
+        fetch("http://localhost:3002/api/create-new-blog", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
@@ -45,7 +45,7 @@ function AddBlogModal(props: IProps) {
                 if(res) {
                     toast.success("Đã tạo bài mới");
                     handleCloseModal();
-                    mutate("https://myblog-backend-ii3d.onrender.com/api/blogs");
+                    mutate("http://localhost:3002/api/blogs/");
                 } else {
                     toast.error("Có lỗi xảy ra");
                 }

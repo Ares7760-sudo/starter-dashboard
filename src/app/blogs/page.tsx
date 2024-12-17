@@ -7,7 +7,7 @@ const BlogsPage = () => {
   .then(r => r.json());
 
   const { data, error, isLoading } = useSWR(
-    "https://myblog-backend-ii3d.onrender.com/api/blogs", 
+    "http://localhost:3002/api/blogs/", 
     fetcher, 
     {
       revalidateIfStale: false,

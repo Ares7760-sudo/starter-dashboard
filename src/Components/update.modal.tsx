@@ -45,23 +45,17 @@ function UpdateBlogModal(props: IProps) {
             return;
           }
 
-          fetch(`https://myblog-backend-ii3d.onrender.com/api/blogs/${id}`, {
-            method: 'PUT',
+          fetch(`http://localhost:3002/api/blogs/${id}`, {
+            method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ title, author, content})
-        }).then(res => res.json())
-            .then(res => {
-                if(res) {
-                    toast.success("Đã cập nhật bài đăng");
-                    handleCloseModal();
-                    mutate("https://myblog-backend-ii3d.onrender.com/api/blogs");
-                } else {
-                    toast.error("Có lỗi xảy ra");
-                }
-            });
+        });
+        toast.success("Đã cập nhật bài đăng");
+        handleCloseModal();
+        mutate("http://localhost:3002/api/blogs/");
     }
 
     const handleCloseModal = () => {

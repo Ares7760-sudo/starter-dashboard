@@ -4,6 +4,8 @@ import Container from 'react-bootstrap/Container';
 import { Button } from 'react-bootstrap';
 import { useState } from 'react';
 import AddBlogModal from './create.modal';
+import UpdateBlogModal from './update.modal';
+import Link from 'next/link';
 
 interface IProps {
     blogs: IBlog[]
@@ -11,13 +13,16 @@ interface IProps {
 
 const InfoTable = (props: IProps) => {
     const { blogs } = props;
+
+    const [ blog, setBlog ] = useState<IBlog | null>(null);
     const [ showModalAddBlog, setShowModalAddBlog] = useState<boolean>(false);
+    const [ showModalUpdateBlog, setShowModalUpdateBlog] = useState<boolean>(false);
     console.log(">>>", blogs)
 
     return (
         <>
         <Container>
-        <div className='mb-3'
+        <div className='mb-3 mt-3'
           style={{ display:"flex", justifyContent: "space-between"}}>
             <h3>Nhật ký của tôi</h3>
             <Button variant='primary'
@@ -34,15 +39,22 @@ const InfoTable = (props: IProps) => {
         </tr>
       </thead>
       <tbody>
-            {blogs.map(blog => {
+            {blogs.map(item => {
                 return (
-                <tr key={blog.id}>
-                <td>{blog.id}</td>
-                <td>{blog.title}</td>
-                <td>{blog.author}</td>
+                <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.title}</td>
+                <td>{item.author}</td>
                 <td>
-                <Button variant='success' className='mx-2'>Xem</Button>
-                <Button variant='warning' className='mx-2'>Sửa</Button>
+                  <Link 
+                  className='mx-2 btn btn-success'
+                  href={`/blogs/${item.id}`}>Xem</Link>
+                <Button variant='warning' className='mx-2'
+                    onClick={() => {
+                        setBlog(item)
+                        setShowModalUpdateBlog(true)
+                    }}
+                >Sửa</Button>
                 <Button variant='danger' className='mx-2'>Xóa</Button>
                 </td>
                 </tr>
@@ -54,6 +66,12 @@ const InfoTable = (props: IProps) => {
         showModalAddBlog={showModalAddBlog}
         setShowModalAddBlog={setShowModalAddBlog}
     ></AddBlogModal>
+    <UpdateBlogModal
+        showModalUpdateBlog={showModalUpdateBlog}
+        setShowModalUpdateBlog={setShowModalUpdateBlog}
+        blog={blog}
+        setBlog={setBlog}
+    ></UpdateBlogModal>
     </Container>
         </>
     )

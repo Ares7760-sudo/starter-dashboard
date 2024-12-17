@@ -5,36 +5,48 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { toast } from 'react-toastify';
 import { mutate } from "swr";
+import { useEffect } from "react";
 
 interface IProps {
-    showModalAddBlog: boolean;
-    setShowModalAddBlog: (value: boolean) => void;
+    showModalUpdateBlog: boolean;
+    setShowModalUpdateBlog: (value: boolean) => void;
+    blog: IBlog | null;
+    setBlog: (value: IBlog | null) => void;
 }
 
-function AddBlogModal(props: IProps) {
-  const {showModalAddBlog, setShowModalAddBlog} = props;
+function UpdateBlogModal(props: IProps) {
+    const { showModalUpdateBlog, setShowModalUpdateBlog, blog, setBlog } = props;
 
-  const [title, setTitle] = useState<string>("");
-  const [author, setAuthor] = useState<string>("");
-  const [content, setContent] = useState<string>("");
+    const [id, setId] = useState<number>(0);
+    const [title, setTitle] = useState<string>("");
+    const [author, setAuthor] = useState<string>("");
+    const [content, setContent] = useState<string>("");
 
-  const handleSubmit = () => {
-        console.log("check>>>", JSON.stringify({ title, author, content}));
+    useEffect(() => {
+        if (blog && blog.id) {
+            setId(blog.id);
+            setTitle(blog.title);
+            setAuthor(blog.author);
+            setContent(blog.content);
+        }
+    }, [blog])
+
+    const handleSubmit = () => {
         if(!title) {
-          toast.error("Phải nhập tiêu đề");
-          return;
-        }
-        if(!author) {
-          toast.error("Phải nhập tác giả");
-          return;
-        }
-        if(!content) {
-          toast.error("Phải nhập nội dung");
-          return;
-        }
-        
-        fetch("https://myblog-backend-ii3d.onrender.com/api/create-new-blog", {
-            method: 'POST',
+            toast.error("Phải nhập tiêu đề");
+            return;
+          }
+          if(!author) {
+            toast.error("Phải nhập tác giả");
+            return;
+          }
+          if(!content) {
+            toast.error("Phải nhập nội dung");
+            return;
+          }
+
+          fetch(`https://myblog-backend-ii3d.onrender.com/api/blogs/${id}`, {
+            method: 'PUT',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json'
@@ -43,33 +55,34 @@ function AddBlogModal(props: IProps) {
         }).then(res => res.json())
             .then(res => {
                 if(res) {
-                    toast.success("Đã tạo bài mới");
+                    toast.success("Đã cập nhật bài đăng");
                     handleCloseModal();
                     mutate("https://myblog-backend-ii3d.onrender.com/api/blogs");
                 } else {
                     toast.error("Có lỗi xảy ra");
                 }
             });
-  }
+    }
 
-  const handleCloseModal = () => {
+    const handleCloseModal = () => {
         setTitle("");
         setAuthor("");
         setContent("");
-        setShowModalAddBlog(false);
+        setBlog(null);
+        setShowModalUpdateBlog(false);
   }
 
   return (
     <>
-      <Modal 
-        show={showModalAddBlog} 
-        onHide={() => setShowModalAddBlog(false)}
+    <Modal 
+        show={showModalUpdateBlog} 
+        onHide={() => setShowModalUpdateBlog(false)}
         backdrop="static"
         keyboard={false}
         size='lg'
       >
         <Modal.Header closeButton>
-          <Modal.Title>Thêm bài mới</Modal.Title>
+          <Modal.Title>Chỉnh sửa bài đăng</Modal.Title>
         </Modal.Header>
         <Modal.Body>
         <Form>
@@ -109,7 +122,7 @@ function AddBlogModal(props: IProps) {
         </Modal.Footer>
       </Modal>
     </>
-  );
+  )
 }
 
-export default AddBlogModal;
+export default UpdateBlogModal
